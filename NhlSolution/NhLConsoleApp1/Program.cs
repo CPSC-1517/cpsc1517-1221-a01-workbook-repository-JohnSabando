@@ -2,7 +2,7 @@
 using NhlClassLibrary;
 
 //Prompt and read in the team name
-Console.WriteLine("Enter the team name: ");
+Console.Write("Enter the team name: ");
 string teamName = Console.ReadLine();
 try
 {

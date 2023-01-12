@@ -30,11 +30,14 @@ namespace NhlClassLibrary
             }
         }
         // Define auto-implemented properties for: Conference, Division
-
+        public Conference Conference { get; set; }
+        public Division Division { get; set; }
         // Greedy constructor
-        public Team(string Name)
+        public Team(string Name, Conference conference, Division division)
         {
             this.Name = Name;
+            Conference = conference;
+            Division = division;
             //_name = Name;
         }
     }
