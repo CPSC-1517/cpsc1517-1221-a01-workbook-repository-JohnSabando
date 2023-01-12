@@ -32,9 +32,10 @@ namespace NhlClassLibrary
         // Define auto-implemented properties for: Conference, Division
 
         // Greedy constructor
-        public Team(string name)
+        public Team(string Name)
         {
-            Name = name;
+            this.Name = Name;
+            //_name = Name;
         }
     }
 }
