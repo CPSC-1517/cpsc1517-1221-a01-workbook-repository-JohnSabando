@@ -29,6 +29,21 @@ namespace NhlClassLibrary
                 _name = value.Trim();
             }
         }
+        public string City
+        {
+            get
+            {
+                return _city;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException(nameof(City), "Citty cannot be blank.");
+                }
+                _city = value.Trim();
+            }
+        }
         // Define auto-implemented properties for: Conference, Division
         public Conference Conference { get; set; }
         public Division Division { get; set; }
