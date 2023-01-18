@@ -8,6 +8,9 @@ namespace NhlClassLibrary
 {
     public class Player
     {
+        const int MinPlayerNo = 1;
+        const int MaxPlayerNo = 98;
+
         private int _playerNumber;
         private string _playerName;
         private int _gamesPlayed;
@@ -17,44 +20,36 @@ namespace NhlClassLibrary
 
         public int PlayerNumber
         {
-            get
+
+            get => _playerNumber;
+            private set
             {
-                return _playerNumber;
-            }
-            set
-            {
-                if (value < 1 || value > 98)
+                if (value < MinPlayerNo || value > MaxPlayerNo)
                 {
-                    throw new ArgumentException("PlayerNumber cannot be less than 1 or greater than 98");
+                    throw new ArgumentException($"PlayerNumber cannot be less than {MinPlayerNo} or greater than {MaxPlayerNo}");
                 }
                 _playerNumber = value;
             }
         }
         public string PlayerName
         {
-            get
-            {
-                return _playerName;
-            }
-            set
+            get => _playerName;
+            private set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new ArgumentNullException(nameof(PlayerName), "Name cannot be blank");
                 }
-                _playerName = value;
+                _playerName = value.Trim();
             }
         }
-        public Position Position { get; set; }
+        public Position Position { get; private set; }
         public int GamesPlayed
         {
-            get
+            get => _gamesPlayed;
+            private set
             {
-                return _gamesPlayed;
-            }
-            set
-            {
-                if (value < 0)
+                if (!Utilities.IsPositiveOrZero(value))
                 {
                     throw new ArgumentException("Number of Games cannot be less than 0");
                 }
@@ -63,54 +58,66 @@ namespace NhlClassLibrary
         }
         public int Goals
         {
-            get
+            get => _goals;
+            private set
             {
-                return _goals;
-            }
-            set
-            {
-                if (value < 0)
+                if (!Utilities.IsPositiveOrZero(value))
                 {
                     throw new ArgumentException("Number of goals cannot be less than 0");
                 }
-                value = _goals;
             }
         }
         public int Assits
         {
-            get
-            {
-                return _assits;
-            }
+            get => _assits;
             set
             {
-                if (value < 0)
+                if (!Utilities.IsPositiveOrZero(value))
                 {
                     throw new ArgumentException("Assits value cannot be less than 0");
                 }
-                _assits = value;
             }
         }
         public int Points
         {
             get
             {
-                return _points;
-            }
-            set
-            {
-                _points = Goals + Assits;
+                return Goals + Assits;
             }
         }
-        public Player(int playerNumber, string playerName, int gamesPlayed, int goals, int assits, int points, Position position)
+        public Player(int playerNumber, string playerName, Position position)
+        {
+            PlayerNumber = playerNumber;
+            PlayerName = playerName;
+            Position = position;
+        }
+        public Player(int playerNumber, string playerName, int gamesPlayed, int goals, int assists)
         {
             PlayerNumber = playerNumber;
             PlayerName = playerName;
             GamesPlayed = gamesPlayed;
             Goals = goals;
-            Assits = assits;
-            Points = points;
-            Position = position;
+            Assits = assists;
+        }
+        public void AddPlayer(Player newPlayer, List<Player> lisftOfPlayers)
+        {
+
+        }
+        public void ListPlayer(List<Player> listOfPlayers)
+        {
+
+        }
+        public void AddGamesPlayed()
+        {
+            GamesPlayed += 1;
+        }
+        public void AddGoals()
+        {
+            Goals += 1;
+        }
+        public void AddAssits()
+        {
+            Assits += 1;
         }
     }
 }

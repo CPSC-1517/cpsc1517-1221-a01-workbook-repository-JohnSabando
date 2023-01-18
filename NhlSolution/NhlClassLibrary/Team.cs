@@ -93,13 +93,5 @@ namespace NhlClassLibrary
         {
             return $"Name: {Name}, City: {City}, Arena: {Arena}, Conference: {Conference}, Division: {Division}";
         }
-        public void AddPlayer(Player newPlayer, List<Player> lisftOfPlayers)
-        {
-
-        }
-        public void ListPlayer(List <Player> listOfPlayers)
-        {
-
-        }
     }
 }
