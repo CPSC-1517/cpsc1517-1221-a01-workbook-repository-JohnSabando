@@ -47,7 +47,7 @@ namespace NhlClassLibrary
         public int GamesPlayed
         {
             get => _gamesPlayed;
-            private set
+            protected set
             {
                 if (!Utilities.IsPositiveOrZero(value))
                 {

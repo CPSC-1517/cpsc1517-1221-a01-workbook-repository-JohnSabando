@@ -13,7 +13,27 @@ namespace NhlClassLibrary
         private string _name;
         private string _city;
         private string _arena;
-
+        public List<Player> players { get; private set; }// = new List<Player>();
+        public void AddPlayer(Player newPlayer)
+        {
+            if (newPlayer == null)
+            {
+                throw new ArgumentNullException(nameof(AddPlayer), "Player cannot be null");
+            }
+            foreach(var existingPlayer in players)
+            {
+                if (newPlayer.PlayerNumber==existingPlayer.PlayerNumber)
+                {
+                    throw new ArgumentException($"PlayerNumber {newPlayer.PlayerNumber} is already in the team");
+                }
+            }
+            if (players.Count == 23)
+            {
+                throw new ArgumentException("Team is full. Cannot add anymore players");
+            }
+            players.Add(newPlayer);
+        }
+        
         public string Name
         {
             get
