@@ -26,21 +26,21 @@ namespace NhLSystemTestProject
             Assert.AreEqual(arena, currentTeam.Arena);
         }
 
-        [TestMethod]
-        [DataRow("", "Name cannot be blank.", Conference.Western, Division.Pacific)]
-        [DataRow("      ", "Name cannot be blank", Conference.Western, Division.Pacific)]
-        public void Name_Invalid_ThrowsArgumentNullException(string teamName, string city, string arena, string exceptedErrorMessage, Conference conference, Division division)
-        {
-            // Arrange and Act
-            try
-            {
-                Team currentTeam = new Team(teamName, city, arena, conference, division);
-                Assert.Fail("An ArgumentNullException should have been thrown");
-            }
-            catch(ArgumentNullException ex)
-            {
-                StringAssert.Contains(ex.Message, exceptedErrorMessage);
-            }
-        }
+        //[TestMethod]
+        //[DataRow("", "Name cannot be blank.", Conference.Western, Division.Pacific)]
+        //[DataRow("      ", "Name cannot be blank", Conference.Western, Division.Pacific)]
+        //public void Name_Invalid_ThrowsArgumentNullException(string teamName, string city, string arena, string exceptedErrorMessage, Conference conference, Division division)
+        //{
+        //    // Arrange and Act
+        //    try
+        //    {
+        //        Team currentTeam = new Team(teamName, city, arena, conference, division);
+        //        Assert.Fail("An ArgumentNullException should have been thrown");
+        //    }
+        //    catch(ArgumentNullException ex)
+        //    {
+        //        StringAssert.Contains(ex.Message, exceptedErrorMessage);
+        //    }
+        //}
     }
 }

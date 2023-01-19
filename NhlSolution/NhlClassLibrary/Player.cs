@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace NhlClassLibrary
 {
@@ -15,7 +16,7 @@ namespace NhlClassLibrary
         private string _playerName;
         private int _gamesPlayed;
         private int _goals;
-        private int _assits;
+        private int _assists;
         private int _points;
 
         public int PlayerNumber
@@ -26,7 +27,8 @@ namespace NhlClassLibrary
             {
                 if (value < MinPlayerNo || value > MaxPlayerNo)
                 {
-                    throw new ArgumentException($"PlayerNumber cannot be less than {MinPlayerNo} or greater than {MaxPlayerNo}");
+                    throw new ArgumentException($"PlayerNumber must be between {MinPlayerNo} and {MaxPlayerNo}");
+                    //throw new ArgumentNullException(nameof(PlayerNumber),$"PlayerNumber must be between {MinPlayerNo} and {MaxPlayerNo}");
                 }
                 _playerNumber = value;
             }
@@ -67,9 +69,9 @@ namespace NhlClassLibrary
                 }
             }
         }
-        public int Assits
+        public int Assists
         {
-            get => _assits;
+            get => _assists;
             set
             {
                 if (!Utilities.IsPositiveOrZero(value))
@@ -82,7 +84,7 @@ namespace NhlClassLibrary
         {
             get
             {
-                return Goals + Assits;
+                return Goals + Assists;
             }
         }
         public Player(int playerNumber, string playerName, Position position)
@@ -91,13 +93,14 @@ namespace NhlClassLibrary
             PlayerName = playerName;
             Position = position;
         }
-        public Player(int playerNumber, string playerName, int gamesPlayed, int goals, int assists)
+        public Player(int playerNo, string name, Position position, int gamesPlayed, int goals, int assists)
         {
-            PlayerNumber = playerNumber;
-            PlayerName = playerName;
+            PlayerNumber = playerNo;
+            PlayerName = name;
+            Position = position;
             GamesPlayed = gamesPlayed;
             Goals = goals;
-            Assits = assists;
+            Assists = assists;
         }
         public void AddPlayer(Player newPlayer, List<Player> lisftOfPlayers)
         {
@@ -117,7 +120,7 @@ namespace NhlClassLibrary
         }
         public void AddAssits()
         {
-            Assits += 1;
+            Assists += 1;
         }
     }
 }
