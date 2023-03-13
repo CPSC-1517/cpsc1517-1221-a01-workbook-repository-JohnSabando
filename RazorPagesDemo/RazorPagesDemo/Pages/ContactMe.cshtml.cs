@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net.Mail;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace RazorPagesDemo.Pages
 {
@@ -33,42 +34,66 @@ namespace RazorPagesDemo.Pages
 
         public void OnPostSendMessage()
         {
-            string subscribeToMail = (SubscribeToMail == true) ? "Yes" : "No";
-            InfoMessage = $"Name: {ContactName} <br />"
-                + $"Email: {ContactEmail} <br />"
-                + $"Comments: {ContactComments} <br />"
-                + $"Subscribe to mail: {subscribeToMail}";
-
-            SmtpClient sendMailClient = new();
-            sendMailClient.Host = Configuration["MailServerSettings:SmtpHost"];
-            sendMailClient.Port = int.Parse(Configuration["MailServerSettings:Port"]);
-            sendMailClient.EnableSsl = bool.Parse(Configuration["MailServerSettings:EnableSsl"]);
-
-            NetworkCredential mailCredentials = new();
-            mailCredentials.UserName = Configuration["MailServerSettings:Username"];
-            mailCredentials.Password = Configuration["MailServerSettings:AppPassword"];
-            sendMailClient.Credentials = mailCredentials;
-
-            string mailToAddress = ContactEmail ?? Configuration["MailServerSettings:Email"];
-            string mailFromAddress = Configuration["MailServerSettings:Email"];
-
-            MailMessage mailMessage = new MailMessage(mailFromAddress, mailToAddress);
-            mailMessage.Subject = "CPSC1517 new contact me form submission";
-            mailMessage.Body = InfoMessage;
-
-            try
+            // Validate all form field values
+            if (string.IsNullOrWhiteSpace(ContactName))
             {
-                sendMailClient.Send(mailMessage);
-                ContactName = null;
-                ContactEmail = null;
-                ContactComments = null;
-                InfoMessage = "Your message has been sent";
+                ModelState.AddModelError(nameof(ContactName), "Contact Name is required");
             }
-            catch (Exception ex)
+            else if (ContactName.Length < 5)
             {
-                ErrorMessage = $"Error sending mail with exception: {ex.Message}";
+                ModelState.AddModelError(nameof(ContactName), "Contact Name must contain 5 or more characters");
+            }
+            else if (string.IsNullOrEmpty(ContactEmail))
+            {
+                ModelState.AddModelError(nameof(ContactEmail), "Contact Email is reuiqred and cannot be blank");
+            }
+            else if (Regex.Match(ContactEmail, @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*@((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))\z").Success)
+            {
+                ModelState.AddModelError(nameof(ContactEmail), "Contact Email is not valid format");
+            }
+            else if (string.IsNullOrWhiteSpace(ContactComments))
+            {
+                ModelState.AddModelError(nameof(ContactComments), "Contact Comments is required and cannot be blank");
             }
 
+            if (ModelState.IsValid)
+            {
+                string subscribeToMail = (SubscribeToMail == true) ? "Yes" : "No";
+                InfoMessage = $"Name: {ContactName} <br />"
+                    + $"Email: {ContactEmail} <br />"
+                    + $"Comments: {ContactComments} <br />"
+                    + $"Subscribe to mail: {subscribeToMail}";
+
+                SmtpClient sendMailClient = new();
+                sendMailClient.Host = Configuration["MailServerSettings:SmtpHost"];
+                sendMailClient.Port = int.Parse(Configuration["MailServerSettings:Port"]);
+                sendMailClient.EnableSsl = bool.Parse(Configuration["MailServerSettings:EnableSsl"]);
+
+                NetworkCredential mailCredentials = new();
+                mailCredentials.UserName = Configuration["MailServerSettings:Username"];
+                mailCredentials.Password = Configuration["MailServerSettings:AppPassword"];
+                sendMailClient.Credentials = mailCredentials;
+
+                string mailToAddress = ContactEmail ?? Configuration["MailServerSettings:Email"];
+                string mailFromAddress = Configuration["MailServerSettings:Email"];
+
+                MailMessage mailMessage = new MailMessage(mailFromAddress, mailToAddress);
+                mailMessage.Subject = "CPSC1517 new contact me form submission";
+                mailMessage.Body = InfoMessage;
+
+                try
+                {
+                    sendMailClient.Send(mailMessage);
+                    ContactName = null;
+                    ContactEmail = null;
+                    ContactComments = null;
+                    InfoMessage = "Your message has been sent";
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage = $"Error sending mail with exception: {ex.Message}";
+                }
+            }
         }
         public IActionResult OnPostClear()
         {
